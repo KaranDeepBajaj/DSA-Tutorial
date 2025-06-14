@@ -113,6 +113,6 @@ if __name__ == '__main__':
     ll.remove_at(0)
     ll.print()
     ll.insert_at(2,"Mr")
-    ll.insert_after_value("Karan","Very")
+    ll.insert_after_value("Is","Very")
     ll.remove_by_value("Bajaj")
     ll.print()
