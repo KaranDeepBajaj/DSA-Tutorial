@@ -7,7 +7,6 @@ class Solution:
             if complement in seen:
                 return [seen[complement], i]
             seen[num] = i
-            print(seen)
 
 if __name__ == '__main__':
     obj=Solution()
