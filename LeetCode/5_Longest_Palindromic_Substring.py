@@ -1,9 +1,6 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         lt=0
-        if (len(s)==1):
-            final=s
-            return (final)
         for i in range(len(s)):
             l=s[i]
             for k in range(i+1,len(s)):
@@ -13,7 +10,7 @@ class Solution:
                     if(len(l)>lt):
                         lt=len(l)
                         final=l
-        if (lt==0):
+        if (len(s)==1 or lt==0):
             final=s[0]
             return (final)
         else:
