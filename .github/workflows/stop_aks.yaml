@@ -1,0 +1,45 @@
+name: Shutdown AKS Cluster
+run-name: "Start/Stop using branch: ${{ github.ref_name }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        type: choice
+        description: Select Options To start/stop aks cluster
+        options:
+          - start
+          - stop
+      runner:
+        required: false
+        type: string
+        default: "platform-runners"
+
+jobs:
+  shutdown-aks:
+    runs-on:
+      - ${{ inputs.runner }}
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ env.login_creds }}
+
+      - name: Get Node Pool Name
+        id: get_nodepool
+        run: |
+          NODEPOOL_NAME=$(az aks show \
+            --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} \
+            --name ${{ secrets.AKS_CLUSTER_NAME }} \
+            --query "agentPoolProfiles[0].name" \
+            -o tsv)
+          echo "NODEPOOL_NAME=$NODEPOOL_NAME" >> $GITHUB_ENV
+
+      - name: Scale Node Pool to 0 (Shutdown)
+        run: |
+          echo "Stopping AKS cluster by scaling node pool $NODEPOOL_NAME to 0..."
+          az aks nodepool scale \
+            --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} \
+            --cluster-name ${{ secrets.AKS_CLUSTER_NAME }} \
+            --name $NODEPOOL_NAME \
+            --node-count 0
