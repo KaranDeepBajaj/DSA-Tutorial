@@ -13,9 +13,9 @@ for filename in os.listdir(directory):
     # Check if it is a file
     if os.path.isfile(old_path):
         # Only modify files that start with "00"
-        if filename.startswith("00"):
+        if filename.startswith("A"):
             # Remove "00" and add "A"
-            new_filename = "A" + filename[2:]
+            new_filename =filename[1:]
             new_path = os.path.join(directory, new_filename)
 
             # Rename the file
