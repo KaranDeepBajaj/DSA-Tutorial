@@ -1,45 +1,21 @@
-name: Shutdown AKS Cluster
-run-name: "Start/Stop using branch: ${{ github.ref_name }}"
+name: List Folders on Push
 
 on:
-  workflow_dispatch:
-    inputs:
-      operation:
-        type: choice
-        description: Select Options To start/stop aks cluster
-        options:
-          - start
-          - stop
-      runner:
-        required: false
-        type: string
-        default: "platform-runners"
+  push:
 
 jobs:
-  shutdown-aks:
-    runs-on:
-      - ${{ inputs.runner }}
+  list-folders:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ env.login_creds }}
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Get Node Pool Name
-        id: get_nodepool
+      - name: Show branch name
         run: |
-          NODEPOOL_NAME=$(az aks show \
-            --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} \
-            --name ${{ secrets.AKS_CLUSTER_NAME }} \
-            --query "agentPoolProfiles[0].name" \
-            -o tsv)
-          echo "NODEPOOL_NAME=$NODEPOOL_NAME" >> $GITHUB_ENV
+         echo "Current branch: ${{ github.ref_name }}"
 
-      - name: Scale Node Pool to 0 (Shutdown)
+      - name: List all folders in the repo
         run: |
-          echo "Stopping AKS cluster by scaling node pool $NODEPOOL_NAME to 0..."
-          az aks nodepool scale \
-            --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} \
-            --cluster-name ${{ secrets.AKS_CLUSTER_NAME }} \
-            --name $NODEPOOL_NAME \
-            --node-count 0
+          echo "All folders in this branch:"
+          find . -type d | sed 's|^\./||' | sort
