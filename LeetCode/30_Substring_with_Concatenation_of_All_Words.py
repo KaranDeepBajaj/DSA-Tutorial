@@ -14,7 +14,7 @@ class Solution:
         for i in range(len_s-len_words+1):
             seen={}
             j=0
-            while j<=count_words:
+            while j<count_words:
                 start=i+j*len_words
                 word=s[start:start+len_words]
                 if word in words:
