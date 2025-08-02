@@ -9,9 +9,10 @@ class Solution:
         count_words=len(words)
         len_words=len(words[0])
         len_s=len(s)
+        total_len=count_words*len_words
         dict_word=Counter(words)
         result=[]
-        for i in range(len_s-len_words+1):
+        for i in range(len_s-total_len+1):
             seen={}
             j=0
             while j<count_words:
