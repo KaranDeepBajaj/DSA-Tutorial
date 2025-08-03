@@ -15,13 +15,9 @@ class Solution:
                 left = right = 0
         left = right = 0
         for char in reversed(s):
-            print(char)
             if char == ')':
                 right += 1
-                print(right)
-                print(left)
             else:
-                print(right)
                 left += 1
 
             if left == right:
@@ -34,5 +30,5 @@ class Solution:
 
 if __name__ == '__main__':
     obj = Solution()
-    o = obj.longestValidParentheses("(()")
+    o = obj.longestValidParentheses("(()()()")
     print(o)
